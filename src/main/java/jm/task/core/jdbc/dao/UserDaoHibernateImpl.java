@@ -59,18 +59,8 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         openSessionAndBeginTransaction();
 
-        sql = "INSERT INTO users (name, lastName, age) VALUES(?, ?, ?)";
-
-        Query query = session.createSQLQuery(sql).addEntity(User.class);
-        query.setString(0, name);
-        query.setString(1, lastName);
-        query.setByte(2, age);
-
-        int num = query.executeUpdate();
-
-        if (num == 1) {
-            System.out.println("User " + name + " " + lastName + " добавлен в базу данных");
-        }
+        session.save(new User(name, lastName, age));
+        System.out.println("User " + name + " " + lastName + " добавлен в базу данных");
 
         commitTransactionAndCloseSession();
     }
@@ -83,7 +73,6 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
         Query query = session.createSQLQuery(sql).addEntity(User.class);
         query.setLong(0, id);
-
         query.executeUpdate();
 
         commitTransactionAndCloseSession();
